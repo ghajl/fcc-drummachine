@@ -1,0 +1,32 @@
+html {
+  background: white;
+  height: 100%;
+  font-size: 6px;
+
+  @media (min-height: 300px) {
+    font-size: 10px;
+  }
+
+  @media (min-height: 450px) {
+    font-size: 14px;
+  }
+}
+
+body {
+  height: 100%;
+  margin: 0; 
+  background: white;
+
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+#root {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+}
+
