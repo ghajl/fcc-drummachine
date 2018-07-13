@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-const Pad = ({
+export const Pad = ({
   id,
   label,
   children,
   src,
-  padRef,
+  audioRef,
+  buttonRef,
   className,
   ...props
 }) => (
@@ -15,12 +16,13 @@ const Pad = ({
     id={id}
     className={`drum-pad ${className}`}
     type="button"
+    ref={buttonRef}
     {...props}
   >
     <audio
       className="clip"
-      id={label}
-      ref={padRef}
+      id={id}
+      ref={audioRef}
       preload="auto"
       src={src}
     >
@@ -30,19 +32,17 @@ const Pad = ({
   </button>
 );
 
-const Display = ({ className, children }) => {
-  return (
-    <div id="display" className={`display ${className}`}>
-      {children}
-    </div>
-  );
-};
+export const Display = ({ className, children }) => (
+  <div id="display" className={`display ${className}`}>
+    {children}
+  </div>
+);
 
 
 export const drumMachineHelper = {
-  makePadObject: function makePadObject(id, label, name, src) {
+  makePadObject: function makePadObject(key, label, name, src) {
     const pad = {
-      id,
+      key,
       label,
       name,
       src: `static/${src}`,
@@ -57,18 +57,42 @@ export class DrumMachine extends React.Component {
     super();
     this.pads = [];
     this.helper = drumMachineHelper;
-    this.pads.push(this.helper.makePadObject('1', 'Q', 'HITOM', 'Hi Tom0003.mp3'));
-    this.pads.push(this.helper.makePadObject('2', 'W', 'MIDTOM', 'Mid Tom0002.mp3'));
-    this.pads.push(this.helper.makePadObject('3', 'E', 'LOWTOM', 'Low Tom0002.mp3'));
-    this.pads.push(this.helper.makePadObject('4', 'A', 'HIHAT', 'Open Hihat0001.mp3'));
-    this.pads.push(this.helper.makePadObject('5', 'S', 'CYMBAL', 'CYmbal0016.mp3'));
-    this.pads.push(this.helper.makePadObject('6', 'D', 'SNARE', 'SnareDrum0002.mp3'));
-    this.pads.push(this.helper.makePadObject('7', 'Z', 'BASS', 'KickDrum0015.mp3'));
-    this.pads.push(this.helper.makePadObject('8', 'X', 'CLAP', 'Clap.mp3'));
-    this.pads.push(this.helper.makePadObject('9', 'C', 'COWBELL', 'Cowbell.mp3'));
+    this.pads.push(this.helper.makePadObject('Q', 'HT', 'HI TOM', 'Hi Tom0003.mp3'));
+    this.pads.push(this.helper.makePadObject('W', 'MT', 'MID TOM', 'Mid Tom0002.mp3'));
+    this.pads.push(this.helper.makePadObject('E', 'LT', 'LOW TOM', 'Low Tom0002.mp3'));
+    this.pads.push(this.helper.makePadObject('A', 'HH', 'HI-HAT', 'Open Hihat0001.mp3'));
+    this.pads.push(this.helper.makePadObject('S', 'CY', 'CYMBAL', 'CYmbal0016.mp3'));
+    this.pads.push(this.helper.makePadObject('D', 'SD', 'SNARE DRUM', 'SnareDrum0002.mp3'));
+    this.pads.push(this.helper.makePadObject('Z', 'BD', 'BASS DRUM', 'KickDrum0015.mp3'));
+    this.pads.push(this.helper.makePadObject('X', 'CL', 'CLAP', 'Clap.mp3'));
+    this.pads.push(this.helper.makePadObject('C', 'CB', 'COWBELL', 'Cowbell.mp3'));
+    this.keys = {};
+    this.pads.forEach((pad) => {
+      this.keys[pad.key] = pad;
+    });
     this.state = {
-      output: 'PRESS THE BUTTON!',
+      output: '---',
     };
+  }
+
+  componentWillMount() {
+    document.addEventListener('keydown', e => this.onKeyPressed(e));
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', e => this.onKeyPressed(e));
+  }
+
+  onKeyPressed = (e) => {
+    e.preventDefault();
+    let { key } = e;
+    if (key && /[a-z]/i.test(key)) {
+      key = key.toUpperCase();
+      if (typeof this.keys[key] !== 'undefined') {
+        const pad = this.keys[key];
+        this.handleClick(e, pad);
+      }
+    }
   }
 
   handleClick = (e, pad) => {
@@ -79,68 +103,49 @@ export class DrumMachine extends React.Component {
     }
   }
 
+  renderPad = (pad) => {
+    pad.audio = React.createRef();
+    pad.button = React.createRef();
+    return (
+      <Pad
+        key={pad.key}
+        id={pad.key}
+        label={pad.label}
+        src={pad.src}
+        audioRef={pad.audio}
+        buttonRef={pad.button}
+        onClick={e => this.handleClick(e, pad)}
+      >
+        <div className="pad-text">
+          <span className="pad-key">
+            {pad.key}
+          </span>
+          <span className="pad-label">
+            {pad.label}
+          </span>
+        </div>
+      </Pad>
+    );
+  }
 
   render() {
     const { output } = this.state;
     return (
       <div id="drum-machine">
-        <Display>
-          {output}
-        </Display>
+        <div className="display-wrapper">
+          <Display>
+            {output}
+          </Display>
+        </div>
         <div className="pads-wrapper">
           <div className="row">
-            {this.pads.slice(0, 3).map((pad) => {
-              pad.audio = React.createRef();
-              return (
-                <Pad
-                  key={pad.id}
-                  id={pad.id}
-                  label={pad.label}
-                  src={pad.src}
-                  padRef={pad.audio}
-                  className=""
-                  onClick={e => this.handleClick(e, pad)}
-                >
-                  {pad.label}
-                </Pad>
-              );
-            })}
+            {this.pads.slice(0, 3).map(pad => this.renderPad(pad))}
           </div>
           <div className="row">
-            {this.pads.slice(3, 6).map((pad) => {
-              pad.audio = React.createRef();
-              return (
-                <Pad
-                  key={pad.id}
-                  id={pad.id}
-                  label={pad.label}
-                  src={pad.src}
-                  padRef={pad.audio}
-                  className=""
-                  onClick={e => this.handleClick(e, pad)}
-                >
-                  {pad.label}
-                </Pad>
-              );
-            })}
+            {this.pads.slice(3, 6).map(pad => this.renderPad(pad))}
           </div>
           <div className="row">
-            {this.pads.slice(6).map((pad) => {
-              pad.audio = React.createRef();
-              return (
-                <Pad
-                  key={pad.id}
-                  id={pad.id}
-                  label={pad.label}
-                  src={pad.src}
-                  padRef={pad.audio}
-                  className=""
-                  onClick={e => this.handleClick(e, pad)}
-                >
-                  {pad.label}
-                </Pad>
-              );
-            })}
+            {this.pads.slice(6).map(pad => this.renderPad(pad))}
           </div>
         </div>
       </div>

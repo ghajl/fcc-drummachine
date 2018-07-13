@@ -1,13 +1,25 @@
 #display {
-  margin: 12px 0 0 12px;
-  height: calc(25% - 12px);
-  position: absolute;
+  
+  height: 20px;
+  position: relative;
   top: 0;
   left: 0;
-  width: calc(50% - 12px);
-  background: #444;
-  color: #f00;
-  border-radius: 1px;
-  font-family: 'Codystar', cursive;
-  text-align: left;  
+  width: 100px;
+  background: #999;
+  color: #fff;
+  border-radius: 2px;
+  font-family: 'Roboto Mono', monospace;
+  text-align: left;
+  line-height: 20px;
+  padding-left: .5rem;
+  box-shadow: inset 1px 1px 4px black;
+}
+
+.display-wrapper {
+  box-shadow: inset 0px 0px 3px #aaa;
+  border-radius: 2px;
+  padding: 5px 0px 5px 5px;
+  height: 30px;
+  margin: 12px auto 0;
+  width: calc(100% - 24px);
 }
