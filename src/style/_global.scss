@@ -1,15 +1,16 @@
-html {
-  background: white;
+html, body {
   height: 100%;
+  text-size-adjust: none;
+}
+
+html {
   font-size: 100%;
   text-size-adjust: none;
 }
 
 body {
-  height: 100%;
   margin: 0; 
   background: white;
-
 }
 
 *, *:before, *:after {
