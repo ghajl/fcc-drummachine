@@ -4,7 +4,9 @@ import './style/main.scss';
 import { DrumMachine } from './App';
 
 
-ReactDOM.render(
-  <DrumMachine />,
-  document.getElementById('root'),
-);
+const rootElement = document.getElementById('root');
+if (rootElement.hasChildNodes()) {
+  ReactDOM.hydrate(<DrumMachine />, rootElement);
+} else {
+  ReactDOM.render(<DrumMachine />, rootElement);
+}

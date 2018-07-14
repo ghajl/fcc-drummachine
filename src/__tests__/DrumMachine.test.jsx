@@ -1,12 +1,11 @@
 import React from 'react';
-import { shallow, configure } from 'enzyme';
-import Adapter from 'enzyme-react-adapter-future';
+import { mount } from 'enzyme';
+import sinon from 'sinon';
 import { DrumMachine, Display, Pad } from '../App';
 
-configure({ adapter: new Adapter() });
-
 describe('DrumMachine', () => {
-  const wrapper = shallow(<DrumMachine />);
+  const wrapper = mount(<DrumMachine />);
+  window.HTMLMediaElement.prototype.play = () => {};
 
   it('renders a div with id="drum-machine"', () => {
     const div = wrapper.find('#drum-machine');
@@ -25,6 +24,33 @@ describe('DrumMachine', () => {
     expect(components.at(6).contains(keys[6])).toEqual(true);
     expect(components.at(7).contains(keys[7])).toEqual(true);
     expect(components.at(8).contains(keys[8])).toEqual(true);
+  });
+
+  describe('Trigger audio', () => {
+    const pad = wrapper.find('.drum-pad').at(0);
+    const audio = pad.find('audio').instance();
+
+    beforeEach(() => {
+      sinon.spy(audio, 'play');
+    });
+
+    afterEach(() => {
+      audio.play.restore();
+    });
+
+    it('when click on a .drum-pad element', () => {
+      pad.simulate('click');
+      expect(audio.play.calledOnce).toEqual(true);
+    });
+
+    it('when press the trigger key associated with .drum-pad', () => {
+      const event = {
+        key: 'Q',
+        preventDefault: () => {},
+      };
+      wrapper.instance().onKeyDown(event);
+      expect(audio.play.calledOnce).toEqual(true);
+    });
   });
 
   describe('inside "#drum-machine"', () => {

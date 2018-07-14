@@ -29,6 +29,10 @@ button.drum-pad {
   &:active {
     transform: scale(0.97);
   }
+
+  &.active {
+    transform: scale(0.97);
+  }
 }
 
 .pad-text {

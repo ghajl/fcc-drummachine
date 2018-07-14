@@ -1,15 +1,7 @@
 html {
   background: white;
   height: 100%;
-  font-size: 6px;
-
-  @media (min-height: 300px) {
-    font-size: 10px;
-  }
-
-  @media (min-height: 450px) {
-    font-size: 14px;
-  }
+  font-size: 100%;
 }
 
 body {

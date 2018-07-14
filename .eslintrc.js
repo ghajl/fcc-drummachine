@@ -36,5 +36,6 @@ module.exports = {
             "always"
         ],
         "no-param-reassign": [2, { "props": false }],
+        "react/jsx-no-bind": "error",
     }
 };
