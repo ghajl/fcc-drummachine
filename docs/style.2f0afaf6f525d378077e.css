@@ -1,16 +1,8 @@
 html, body {
-  height: 100%;
-  -webkit-text-size-adjust: none;
-     -moz-text-size-adjust: none;
-      -ms-text-size-adjust: none;
-          text-size-adjust: none; }
+  height: 100%; }
 
 html {
-  font-size: 100%;
-  -webkit-text-size-adjust: none;
-     -moz-text-size-adjust: none;
-      -ms-text-size-adjust: none;
-          text-size-adjust: none; }
+  font-size: 16px; }
 
 body {
   margin: 0;
@@ -103,7 +95,7 @@ button.drum-pad {
     left: 0;
     top: 0;
     margin-top: 3px;
-    font-size: .6rem;
+    font-size: .5rem;
     line-height: 1; }
   .pad-text .pad-label {
     position: absolute;
@@ -112,7 +104,7 @@ button.drum-pad {
     color: #b22;
     margin-bottom: 2px;
     margin-left: 1px;
-    font-size: 1.2rem;
+    font-size: 1rem;
     line-height: 1; }
 
 #display {
@@ -125,7 +117,7 @@ button.drum-pad {
   color: #fff;
   border-radius: 2px;
   font-family: 'Roboto Mono', monospace;
-  font-size: .8rem;
+  font-size: .7rem;
   text-align: left;
   line-height: 20px;
   padding-left: .5rem;
@@ -133,7 +125,7 @@ button.drum-pad {
           box-shadow: inset 1px 1px 4px black; }
   @media (min-width: 300px) {
     #display {
-      font-size: 1rem; } }
+      font-size: .8rem; } }
 
 .display-wrapper {
   -webkit-box-shadow: inset 0px 0px 3px #aaa;
