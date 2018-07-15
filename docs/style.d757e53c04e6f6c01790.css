@@ -120,7 +120,7 @@ button.drum-pad {
   font-size: .7rem;
   text-align: left;
   line-height: 20px;
-  padding-left: .5rem;
+  padding-left: .4rem;
   -webkit-box-shadow: inset 1px 1px 4px black;
           box-shadow: inset 1px 1px 4px black; }
   @media (min-width: 300px) {
